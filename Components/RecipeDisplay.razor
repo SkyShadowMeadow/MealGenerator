@@ -1,0 +1,17 @@
+﻿@code {
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string Instructions { get; set; }
+
+    [Parameter]
+    public string ImageUrl { get; set; }
+}
+
+<h2>@Title</h2>
+<p>@Instructions</p>
+@if (!string.IsNullOrEmpty(ImageUrl))
+{
+    <img src="@ImageUrl" alt="Generated Meal Image" />
+}

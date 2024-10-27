@@ -1,10 +1,13 @@
 using MealGenerator.Components;
+using Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<RecipeService>();
 
 var app = builder.Build();
 

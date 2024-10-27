@@ -1,0 +1,44 @@
+﻿@using Models
+@using Services
+@page "/"
+@inject RecipeService RecipeService
+
+<h3>Select Meal Type</h3>
+<select @bind="selectedMealType">
+    <option value="Breakfast">Breakfast</option>
+    <option value="Lunch">Lunch</option>
+    <option value="Dinner">Dinner</option>
+</select>
+
+<h3>Enter Ingredients</h3>
+<input @bind="ingredients" placeholder="e.g., eggs, cheese, spinach" />
+
+<button @onclick="GenerateRecipe">Generate Recipe</button>
+
+@if (!string.IsNullOrEmpty(recipeInstructions))
+{
+    <RecipeDisplay Title="@recipeTitle" Instructions="@recipeInstructions" ImageUrl="@recipeImageUrl" />
+}
+
+@code {
+    private string selectedMealType = "Breakfast";
+    private string ingredients;
+    private string recipeTitle;
+    private string recipeInstructions;
+    private string recipeImageUrl;
+
+    private async Task GenerateRecipe()
+    {
+        var request = new MealRequestModel()
+        {
+            TypeOfMeal = selectedMealType,
+            Ingredients = ingredients.Split(", ").ToList()
+        };
+
+        var recipeResponse = await RecipeService.GenerateRecipe(request);
+        recipeTitle = recipeResponse.MealTitle;
+        recipeInstructions = recipeResponse.Instructions;
+
+        recipeImageUrl = await RecipeService.GenerateImageAsync(recipeTitle);
+    }
+}
